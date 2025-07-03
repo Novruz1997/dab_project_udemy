@@ -1,0 +1,5 @@
+[run]
+omit = 
+    # removing any files which we don't want pytest check perform on that files/folders
+    src/__init__.py
+    src/*/__init__.py
