@@ -1,0 +1,43 @@
+name: CI Workflow
+
+on:
+  push: 
+    branches: # this will run when we push code to feature branc
+      - 'feature/**'
+  pull_request: # and also will run when PR is raised to main branch
+    branches:
+      - 'main'
+
+jobs:
+  ci_job:
+    name: CI Job 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code # this steps make sure this ubuntu-latest machine has your code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies + pytest-html
+        run: | # | allows you to write code in multiple lines
+          python -m pip install --upgrade pip 
+          pip install -r requirements.txt
+
+      - name: Run pytest & generate HTML report 
+        run: |
+          pytest \
+            --disable-warnings \
+            --cov=./src \
+            --cov-report=html
+
+      # this is another github action, takes folder from your code and bundles (.zip) your code and load as artifact
+      # which you can later download from Github Actions UI or further pass to another jobs.
+      # it will take htmlcov folder because our test cov will generate htmlcov folder.
+      - name: Upload coverage HTML report 
+        uses: actions/upload-artifact@v4 
+        with:
+          name: coverage-html
+          path: htmlcov
