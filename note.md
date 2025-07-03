@@ -9,7 +9,7 @@
 8.  databricks auth describe --profile TEST
 9. databricks bundle validate
 10. `databricks bundle summary` = just summary not validation
-11. adding new profile / new target - Install Databricks Extension to VSCOde. Shift + CTRL + P then type Databricks open databricks configuration file and then add your targets. (it stores that configuration file in our file system. /Users/novaguliyev/.databrickscfg)  ex:
+11. adding new profile / new target - Install Databricks Extension to VSCOde. Shift + CTRL + P then type "Open Databricks Configuration File" and then add your targets. (it stores that configuration file in our file system. /Users/novaguliyev/.databrickscfg)  ex:
 [DEFAULT]
 host  = https://adb-3307511481276917.17.azuredatabricks.net/
 token = [REDACTED]
@@ -42,9 +42,19 @@ if you removed something manually and want to redeploy everything again not incr
     8. copy the path of that .whl file and go to terminal `pip3 install <path_of_wheel>`
     9. pip list, you will see your package there. then you can easily import whatever you want
 19. Delta Live Tables CI/CD - With new changes now, we can write to multiple schema in dlt. before we were only allowed to write one destination schema. and all dynamic values need to be passed in at a pipeline level as spark cluster configuration `ADVANCED -> Configuration`. from notebook we will access them via `spark.conf.get`.
+11. In dev environment usually we use PAT tokens and users use that PAT token and they are mainly their entraid, but in TEST/PROD we don't want them to have an access to those environments and update anything. therefore, we will use service principals. First we should create a service principal. 
+Go to Azure Portal -> App Registration -> give a name ex: <sp-databricks-prod-eus2> and then create. 
+go to databricks workspace test/prod -> settings from top right -> Identity & Access -> Add service principals. -> Add new -> it is microsoft entra id spn click it -> copy Application ID and give name (usually keep the same name of spn name.) -> Then click on created service principal -> Allow it to create a cluster.
+Then go to your SPN from App registration -> Manage -> Generate a New Client Secret -> create one and give name -> then copy value 4n68Q~L1pWHzKrjc_e~B37himXss4lx1lmgKXaQ6 
+Now, if you remember previously from our local in order to deploy to our test environment in our 
+/Users/novaguliyev/.databrickscfg file we specified PAT TOkens for Test/Prod as well. but as we agreed now, it is not the recommended way, because user should not have an access to that. 
+updat that profile file
 
-
-
+[TEST]
+host = https://adb-4137916781113256.16.azuredatabricks.net/
+azure_client_id = [REDACTED] - get this from spn in app registration
+azure_tenant_id = [REDACTED] - get this from spn in app registration
+azure_client_secret = [REDACTED] - This is the secret value which you created above.
 
 >> Resources to study
 1. Substution and Variables - https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/variables
