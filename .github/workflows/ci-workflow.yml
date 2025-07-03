@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies + pytest-html
         run: | # | allows you to write code in multiple lines
           python -m pip install --upgrade pip 
-          pip install -r requirements.txt
+          pip install -r requirements-pyspark.txt
 
       - name: Run pytest & generate HTML report 
         run: |
