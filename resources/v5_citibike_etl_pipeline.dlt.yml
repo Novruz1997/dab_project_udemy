@@ -1,0 +1,28 @@
+resources:
+  pipelines:
+    pipeline_citibike_etl_pipeline:
+      name: citibike_etl_pipeline
+      configuration:
+        # we override our catalog, we use our variable.
+        catalog: "${var.catalog}"
+      clusters:
+        - label: default
+          num_workers: 1
+      libraries:
+          # we define path to our dlt notebooks
+        - notebook:
+            path: ../citibike_etl/dlt/01_bronze/01_bronze_citibike.ipynb
+        - notebook:
+            path: ../citibike_etl/dlt/02_silver/02_silver_citibike.ipynb
+        - notebook:
+            path: ../citibike_etl/dlt/03_gold/03_gold_citibike_daily_ride_summary.ipynb
+        - notebook:
+            path: ../citibike_etl/dlt/03_gold/03_gold_citibike_daily_station_performance.ipynb
+      # We can write any schema , we can override schema from notebook itself
+      # but we gave just default schema from config. for simplicity we wil not override it
+      schema: default
+      # development is by default true, but we want it to be false in test/prod. therefore we will create variable
+      # for development variable in our databricks.yml file and will use it here.
+      development: "${var.dev_flag}"
+      # we override our target catalog as well, we use our variable.
+      catalog: "${var.catalog}"

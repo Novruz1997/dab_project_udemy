@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: dab_project_udemy
+Version: 0.0.1
+Summary: this contains the code in ./src directory of the project
+Author: Nova Guliyev
+Requires-Dist: setuptools
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary

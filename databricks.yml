@@ -1,0 +1,75 @@
+# This is a Databricks asset bundle definition for dab_project_udemy.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: dab_project_udemy
+  uuid: 1342f18b-a6e0-48c6-8957-330f32db6ed8
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+
+
+# we set out variables, so we will use it
+# when we deploy to test/prod we will override this variable
+# ex:databricks bundle deploy --target tes --var="catalog=citibike_test"
+# ex:databricks bundle deploy --target tes --var="catalog=citibike_test, another_var=another_var_value"
+# we can override variables from the .yml file as well for test and prod. look below test/prof variable section
+variables:
+  catalog: 
+    default: "citibike_dev"
+  # we add dev_flag for our dlt. look dlt job config you will understand . we will use dev_flag for dev/test/prod dlt
+  # and we override it in test/prod config below
+  dev_flag:
+    default: true
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-3307511481276917.17.azuredatabricks.net
+      # we can define our custom root path for dev env as well
+      # root_path: /Workspace/Users/nguliyev@kinetechconsult.com/bundle_deployment/${bundle.name}/${bundle.target}
+      # additionally, if we want to use root path to shared folder like we did in 
+      # prod and test ex: it will give us error because dev should be unique for users. if mode is development you should have uniqueness
+      # root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+
+
+  test:
+    mode: production
+    # we can override variables from here as well. for test it will override catalog variable
+    variables:
+      catalog:
+        default: "citibike_test"
+      dev_flag:
+        default: false
+    # we use preset to prefix job names. in test and prod if we don't set it will not have any prefix in job. but in dev username is prefix. 
+    # in dev if we want to set prefix it should contain user name as well but in test/prod is all up to us. 
+    presets:
+      name_prefix: '[testing] '
+    workspace:
+      host: https://adb-4137916781113256.16.azuredatabricks.net
+      # In test we want to deploy it to the Shared folder
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: nguliyev@kinetechconsult.com
+        level: CAN_MANAGE
+
+  prod:
+    mode: production
+    variables:
+      catalog:
+        default: "citibike_prod"
+      dev_flag:
+        default: false
+    workspace:
+      host: https://adb-2957129268936759.19.azuredatabricks.net
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: nguliyev@kinetechconsult.com
+        level: CAN_MANAGE

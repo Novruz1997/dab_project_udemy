@@ -1,0 +1,59 @@
+# here we will set our complex variable for cluster configuration.
+
+
+variables:
+  # below we name our cluster config variable as we want
+  ds3_v2_sn:
+    # type should be complex
+    type: complex 
+    # we set default value
+    default:
+      # paste cluster config
+      cluster_name: ""
+      spark_version: 15.4.x-scala2.12
+      spark_conf:
+        spark.master: local[*, 4]
+        spark.databricks.cluster.profile: singleNode
+      azure_attributes:
+        first_on_demand: 1
+        availability: SPOT_WITH_FALLBACK_AZURE
+        spot_bid_max_price: -1
+      node_type_id: Standard_DS3_v2
+      driver_node_type_id: Standard_DS3_v2
+      custom_tags:
+        ResourceClass: SingleNode
+      spark_env_vars:
+        PYSPARK_PYTHON: /databricks/python3/bin/python3
+      enable_elastic_disk: true
+      data_security_mode: SINGLE_USER
+      runtime_engine: STANDARD
+      num_workers: 0
+  # lets say we want to add one more cluster config
+  f4_sn:
+    type: complex 
+    default:
+      cluster_name: ""
+      spark_version: 15.4.x-scala2.12
+      spark_conf:
+        spark.master: local[*, 4]
+        spark.databricks.cluster.profile: singleNode
+      azure_attributes:
+        first_on_demand: 1
+        availability: SPOT_WITH_FALLBACK_AZURE
+        spot_bid_max_price: -1
+      node_type_id: Standard_F4
+      driver_node_type_id: Standard_F4
+      custom_tags:
+        ResourceClass: SingleNode
+      spark_env_vars:
+        PYSPARK_PYTHON: /databricks/python3/bin/python3
+      enable_elastic_disk: true
+      data_security_mode: SINGLE_USER
+      runtime_engine: STANDARD
+      num_workers: 0
+  # below we will use lookup variable. which means we will extract the id of given objefct.
+  # We will specify the name of object and it will grab id of given object.
+  all_purpose_cluster_id:
+    # type = lookup
+    lookup:
+      cluster: "Nova's Interactive Cluster" # our all purpose cluster name

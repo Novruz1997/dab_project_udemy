@@ -1,0 +1,59 @@
+# in this one we will use complex var as well from clusters.yml
+
+resources:
+  jobs:
+    v2_citibike_etl_pipeline_nb:
+      name: v2_citibike_etl_pipeline_nb
+      tasks:
+        - task_key: 01_bronze_citibike
+          notebook_task:
+            notebook_path: ../citibike_etl/notebooks/01_bronze/01_bronze_citibike.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: f4_sn # we point below specified cluster
+        - task_key: 02_silver_citibike
+          depends_on:
+            - task_key: 01_bronze_citibike
+          notebook_task:
+            notebook_path: ../citibike_etl/notebooks/02_silver/02_silver_citibike.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: f4_sn # we point below specified cluster
+        - task_key: 03_gold_citibike_daily_ride_summary
+          depends_on:
+            - task_key: 02_silver_citibike
+          notebook_task:
+            notebook_path: ../citibike_etl/notebooks/03_gold/03_gold_citibike_daily_ride_summary.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: ds3_v2_sn # we point below specified cluster 
+        - task_key: 03_gold_citibike_daily_station_performancr
+          depends_on:
+            - task_key: 02_silver_citibike
+          notebook_task:
+            notebook_path: ../citibike_etl/notebooks/03_gold/03_gold_citibike_daily_station_performance.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: ds3_v2_sn # we point below specified cluster
+      job_clusters:
+        - job_cluster_key: ds3_v2_sn
+          # we use our complex variable here. 
+          new_cluster: "${var.ds3_v2_sn}"
+          
+        # we want to specify one more coluster config from clusters.yml file      
+        - job_cluster_key: f4_sn
+          new_cluster: "${var.f4_sn}"   
+      queue:
+        enabled: true
