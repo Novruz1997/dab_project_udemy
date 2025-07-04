@@ -15,15 +15,15 @@
 10. `databricks bundle summary` = just summary not validation
 11. adding new profile / new target - Install Databricks Extension to VSCOde. Shift + CTRL + P then type "Open Databricks Configuration File" and then add your targets. (it stores that configuration file in our file system. /Users/novaguliyev/.databrickscfg)  ex:
 [DEFAULT]
-host  = https://adb-3307511481276917.17.azuredatabricks.net/
+host  = https://adb-3307511483434434343.17.azuredatabricks.net/
 token = [REDACTED]
 
 [TEST]
-host = https://adb-4137916781113256.16.azuredatabricks.net/
+host = https://adb-4137916783434343434.16.azuredatabricks.net/
 token = [REDACTED]
 
 [PROD]
-host = https://adb-2957129268936759.19.azuredatabricks.net/
+host = https://adb-295712926343434343.19.azuredatabricks.net/
 token = [REDACTED] 
 
 12. databricks bundle deploy --target <target_name ex: test> = deploying different env
@@ -57,7 +57,7 @@ Now, if you remember previously from our local in order to deploy to our test en
 updat that profile file
 
 [TEST]
-host = https://adb-4137916781113256.16.azuredatabricks.net/
+host = https://adb-4137916232434343434.16.azuredatabricks.net/
 azure_client_id = [REDACTED] - get this from spn in app registration
 azure_tenant_id = [REDACTED] - get this from spn in app registration
 azure_client_secret = [REDACTED] - This is the secret value which you created above.
