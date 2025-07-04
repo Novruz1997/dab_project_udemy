@@ -8,7 +8,8 @@ include:
   - resources/*.yml
   - resources/*/*.yml
 
-
+# run_as:
+#   service_principal_name: '238f7a5a-198e-4974-a660-a9f33b46f312'
 
 # we set out variables, so we will use it
 # when we deploy to test/prod we will override this variable
@@ -38,7 +39,8 @@ targets:
       # additionally, if we want to use root path to shared folder like we did in 
       # prod and test ex: it will give us error because dev should be unique for users. if mode is development you should have uniqueness
       # root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
-
+    run_as:
+      user_name: nguliyev@kinetechconsult.com
 
   test:
     mode: production
@@ -61,6 +63,8 @@ targets:
         level: CAN_MANAGE
       # we replace our username with service principal name, because for test/dev we will use spn , users should not do with their username
       # - user_name: nguliyev@kinetechconsult.com
+      # one more NOTE: when you have dlt pipeline as well, if you want to change run_as to spn in if you have dlt pipeline
+      # it will fail, therefore, I commented my dlt pipeline in resources/ folder.
     run_as:
       service_principal_name: 238f7a5a-198e-4974-a660-a9f33b46f312 # we also run as spn.
 
