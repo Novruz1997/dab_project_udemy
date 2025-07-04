@@ -54,6 +54,6 @@ variables:
   # below we will use lookup variable. which means we will extract the id of given objefct.
   # We will specify the name of object and it will grab id of given object.
   all_purpose_cluster_id:
-    # type = lookup
-    lookup:
+    lookup:     # type = lookup 
       cluster: "Nova's Interactive Cluster" # our all purpose cluster name
+      # If you deploy to test and prod, make sure SPN has an access to this interactive cluster. from cluster manage access
