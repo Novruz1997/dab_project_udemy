@@ -23,6 +23,8 @@ host = https://adb-2957129268936759.19.azuredatabricks.net/
 token = [REDACTED] 
 
 12. databricks bundle deploy --target <target_name ex: test> = deploying different env
+    if you are running from local. `databricks bundle deploy -t <target_name> -p <target_profile_name_from your local dbx configuration file: ex:  TEST>
+    so, databricks bundle deploy -t test -p TEST
 13. databricks bundle destroy = removes deployment from workspace
 14. Databricks Asset Bundle only deploy changes, so it does incremental changes deployment. 
     you can see `last_modified_timestamp` value under .databricks/bundle/<env>/sync-snapshots/<sometext>.json

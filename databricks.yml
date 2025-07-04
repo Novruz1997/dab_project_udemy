@@ -9,13 +9,6 @@ include:
   - resources/*/*.yml
 
 
-# this will not deploy dlt in TEST/PROD because with dlt + run_as spn is not working.
-experimental:
-  use_legacy_run_as: true
-
-# run_as:
-#   service_principal_name: '238f7a5a-198e-4974-a660-a9f33b46f312'
-
 # we set out variables, so we will use it
 # when we deploy to test/prod we will override this variable
 # ex:databricks bundle deploy --target tes --var="catalog=citibike_test"
@@ -86,5 +79,9 @@ targets:
       host: https://adb-2957129268936759.19.azuredatabricks.net
       root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
     permissions:
-      - user_name: nguliyev@kinetechconsult.com
+      # - user_name: nguliyev@kinetechconsult.com
+      #   level: CAN_MANAGE
+      - service_principal_name: 5c4cc74d-5da9-423c-9d96-efbc6d65cfc0
         level: CAN_MANAGE
+    run_as: 
+      service_principal_name: 5c4cc74d-5da9-423c-9d96-efbc6d65cfc0
