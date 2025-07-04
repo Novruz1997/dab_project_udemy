@@ -57,8 +57,12 @@ targets:
       # In test we want to deploy it to the Shared folder
       root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
     permissions:
-      - user_name: nguliyev@kinetechconsult.com
+      - service_principal_name: 238f7a5a-198e-4974-a660-a9f33b46f312 # we paste client id of service principal
         level: CAN_MANAGE
+      # we replace our username with service principal name, because for test/dev we will use spn , users should not do with their username
+      # - user_name: nguliyev@kinetechconsult.com
+    run_as:
+      service_principal_name: 238f7a5a-198e-4974-a660-a9f33b46f312 # we also run as spn.
 
   prod:
     mode: production

@@ -56,6 +56,16 @@ azure_client_id = [REDACTED] - get this from spn in app registration
 azure_tenant_id = [REDACTED] - get this from spn in app registration
 azure_client_secret = [REDACTED] - This is the secret value which you created above.
 
+Once we do above steps, we do update our databricks.yml file as well and this time for test/prod instead of running it as our username. we run it as service principal. 
+Next, because we will run job as service principal in dbx , that service principal should have an access to the catalog or individual objects. Go to portal catalog -> permissions -> look for service principal look for name -> then assign permission.
+
+
+
+
+
+
+
+
 >> Resources to study
 1. Substution and Variables - https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/variables
 
