@@ -8,6 +8,11 @@ include:
   - resources/*.yml
   - resources/*/*.yml
 
+
+# this will not deploy dlt in TEST/PROD because with dlt + run_as spn is not working.
+experimental:
+  use_legacy_run_as: true
+
 # run_as:
 #   service_principal_name: '238f7a5a-198e-4974-a660-a9f33b46f312'
 
@@ -65,6 +70,8 @@ targets:
       # - user_name: nguliyev@kinetechconsult.com
       # one more NOTE: when you have dlt pipeline as well, if you want to change run_as to spn in if you have dlt pipeline
       # it will fail, therefore, I commented my dlt pipeline in resources/ folder.
+      # additionally from Setting -> User -> Access & Identity -> Service Principal -> Permission -> Give 'Service Principal: User' access
+      # to yourself as well because to run as SPN you have that permission to together with Manager Permission on SPN.
     run_as:
       service_principal_name: 238f7a5a-198e-4974-a660-a9f33b46f312 # we also run as spn.
 
