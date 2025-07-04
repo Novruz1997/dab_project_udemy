@@ -1,5 +1,9 @@
 # DATABRICKS ASSET BUNDLE
 
+>> Resources to study
+1. Substution and Variables - https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/variables
+
+
 1.  databricks -h
 2.  databricks configure -h
 3.  databricks configure --host https://adb-3307511481276917.17.azuredatabricks.net/ --profile DEFAULT
@@ -47,7 +51,7 @@ if you removed something manually and want to redeploy everything again not incr
 11. In dev environment usually we use PAT tokens and users use that PAT token and they are mainly their entraid, but in TEST/PROD we don't want them to have an access to those environments and update anything. therefore, we will use service principals. First we should create a service principal. 
 Go to Azure Portal -> App Registration -> give a name ex: <sp-databricks-prod-eus2> and then create. 
 go to databricks workspace test/prod -> settings from top right -> Identity & Access -> Add service principals. -> Add new -> it is microsoft entra id spn click it -> copy Application ID and give name (usually keep the same name of spn name.) -> Then click on created service principal -> Allow it to create a cluster.
-Then go to your SPN from App registration -> Manage -> Generate a New Client Secret -> create one and give name -> then copy value 4n68Q~L1pWHzKrjc_e~B37himXss4lx1lmgKXaQ6 
+Then go to your SPN from App registration -> Manage -> Generate a New Client Secret -> create one and give name -> then copy value [redacted] 
 Now, if you remember previously from our local in order to deploy to our test environment in our 
 /Users/novaguliyev/.databrickscfg file we specified PAT TOkens for Test/Prod as well. but as we agreed now, it is not the recommended way, because user should not have an access to that. 
 updat that profile file
@@ -63,11 +67,10 @@ Next, because we will run job as service principal in dbx , that service princip
 
 
 
-
-
-
-
-
->> Resources to study
-1. Substution and Variables - https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/variables
-
+## Above Configurations are for our local. because we set profiles in our local. 
+But in Continuous Delivery we need to set our workflow in Github , Now we will practice it. and will set our credentials in our Github. 
+1. To create an environment in github free account - we should switch it to be a public repository.
+2. Setting > Environemnts > Name environment: ex: test > Add environment secret - Add azure client id, client secret for spn config.
+3. Make sure secret names are all uppercase AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID
+4. when you setup `prod` environment -> Make sure add protection rule : required reviewer -> for now, choose your name, because to deploy to prod should require manual approval.
+5. Once we created cd-workflow.yml file we should manually approve PROD portion. Because we set approve prod deployment.
